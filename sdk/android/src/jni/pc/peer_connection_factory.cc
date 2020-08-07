@@ -12,6 +12,8 @@
 
 #include <memory>
 #include <utility>
+#include <media/engine/multiplex_codec_factory.h>
+#include <media/engine/multiplex_augment_only_codec_factory.h>
 
 #include "absl/memory/memory.h"
 #include "api/video_codecs/video_decoder_factory.h"
@@ -319,12 +321,31 @@ ScopedJavaLocalRef<jobject> CreatePeerConnectionFactoryForJava(
   media_dependencies.audio_encoder_factory = std::move(audio_encoder_factory);
   media_dependencies.audio_decoder_factory = std::move(audio_decoder_factory);
   media_dependencies.audio_processing = std::move(audio_processor);
-  media_dependencies.video_encoder_factory =
-      absl::WrapUnique(CreateVideoEncoderFactory(jni, jencoder_factory));
-  media_dependencies.video_decoder_factory =
-      absl::WrapUnique(CreateVideoDecoderFactory(jni, jdecoder_factory));
+
+  //media_dependencies.video_encoder_factory =
+  //    absl::WrapUnique(CreateVideoEncoderFactory(jni, jencoder_factory));
+  //media_dependencies.video_decoder_factory =
+  //    absl::WrapUnique(CreateVideoDecoderFactory(jni, jdecoder_factory));
+
+  ///////////////////////////Multiplex Changes//////////////////////////////////////////////////////////////
+
+  media_dependencies.video_encoder_factory =   std::unique_ptr<webrtc::VideoEncoderFactory>(
+      new webrtc::MultiplexAugmentOnlyEncoderFactory(
+         absl::WrapUnique(CreateVideoEncoderFactory(jni, jencoder_factory)), false ));
+
+
+  media_dependencies.video_decoder_factory =  std::unique_ptr<webrtc::VideoDecoderFactory>(
+         new webrtc::MultiplexAugmentOnlyDecoderFactory(
+                 absl::WrapUnique(CreateVideoDecoderFactory(jni, jdecoder_factory)) , false  ));
+
+
+   //////////////////////////////Multiplex Changes////////////////////////////////////////////////////////////
+
+
   dependencies.media_engine =
       cricket::CreateMediaEngine(std::move(media_dependencies));
+
+
 
   rtc::scoped_refptr<PeerConnectionFactoryInterface> factory =
       CreateModularPeerConnectionFactory(std::move(dependencies));
