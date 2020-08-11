@@ -169,10 +169,9 @@ void AndroidVideoTrackSource::OnFrameCapturedAug(JNIEnv* env,
     if (apply_rotation() && rotation != kVideoRotation_0)
         buffer = buffer->ToI420();
 
-
-    int dd = (int)j_augLeng;
+   
     jsize augmenting_data_length = env->GetArrayLength(augData.obj());
-    unsigned char * isCopy;
+
     jbyte* jbae = env->GetByteArrayElements(augData.obj(), nullptr);
 
     char * imageSource = (char *)jbae;

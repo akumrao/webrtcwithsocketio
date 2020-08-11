@@ -74,7 +74,7 @@ public class VideoSource extends MediaSource {
         adaptedFrame.release();
       }
     }
-
+    @Override
     public void onFrameCapturedAug(VideoFrame frame , int augLen, byte[] augData) {
       final VideoProcessor.FrameAdaptationParameters parameters =
               nativeAndroidVideoTrackSource.adaptFrame(frame);
