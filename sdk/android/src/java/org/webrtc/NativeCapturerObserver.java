@@ -50,4 +50,22 @@ class NativeCapturerObserver implements CapturerObserver {
         new VideoFrame(adaptedBuffer, frame.getRotation(), parameters.timestampNs));
     adaptedBuffer.release();
   }
+
+
+  @Override
+  public void onFrameCapturedAug(VideoFrame frame,  int augLen, byte[] augData) {
+    final VideoProcessor.FrameAdaptationParameters parameters =
+            nativeAndroidVideoTrackSource.adaptFrame(frame);
+    if (parameters == null) {
+      // Drop frame.
+      return;
+    }
+
+    final VideoFrame.Buffer adaptedBuffer =
+            frame.getBuffer().cropAndScale(parameters.cropX, parameters.cropY, parameters.cropWidth,
+                    parameters.cropHeight, parameters.scaleWidth, parameters.scaleHeight);
+    nativeAndroidVideoTrackSource.onFrameCapturedAug(
+            new VideoFrame(adaptedBuffer, frame.getRotation(), parameters.timestampNs), augLen,augData);
+    adaptedBuffer.release();
+  }
 }

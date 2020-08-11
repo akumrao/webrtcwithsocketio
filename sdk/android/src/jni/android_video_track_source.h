@@ -72,6 +72,14 @@ class AndroidVideoTrackSource : public rtc::AdaptedVideoTrackSource {
                        jlong j_timestamp_ns,
                        const JavaRef<jobject>& j_video_frame_buffer);
 
+
+    void OnFrameCapturedAug(JNIEnv* env,
+                         jint j_rotation,
+                         jlong j_timestamp_ns,
+                         const JavaRef<jobject>& j_video_frame_buffer, jint j_augLeng,  const JavaRef<jbyteArray>& jaugData );
+
+
+
   void SetState(JNIEnv* env,
                 jboolean j_is_live);
 

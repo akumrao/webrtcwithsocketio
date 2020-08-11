@@ -769,7 +769,7 @@ public class MediaCodecVideoDecoder {
 
     // Callback from |surfaceTextureHelper|. May be called on an arbitrary thread.
     @Override
-    public void onFrame(VideoFrame frame) {
+    public void onFrame(VideoFrame frame, int augLen, byte[] augData) { //augbuffer
       synchronized (newFrameLock) {
         if (renderedBuffer != null) {
           Logging.e(TAG, "Unexpected onFrame() called while already holding a texture.");

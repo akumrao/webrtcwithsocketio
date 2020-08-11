@@ -181,8 +181,8 @@ public class SurfaceViewRenderer extends SurfaceView
 
   // VideoSink interface.
   @Override
-  public void onFrame(VideoFrame frame) {
-    eglRenderer.onFrame(frame);
+  public void onFrame(VideoFrame frame , int augLen, byte[] augDat) {//augbuffer
+    eglRenderer.onFrame(frame, augLen, augDat );
   }
 
   // View layout interface.

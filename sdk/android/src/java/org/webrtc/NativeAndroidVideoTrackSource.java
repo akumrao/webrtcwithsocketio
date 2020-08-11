@@ -59,6 +59,12 @@ class NativeAndroidVideoTrackSource {
         frame.getTimestampNs(), frame.getBuffer());
   }
 
+  public void onFrameCapturedAug(VideoFrame frame, int augLen, byte[] augData) {
+    nativeOnFrameCapturedAug(nativeAndroidVideoTrackSource, frame.getRotation(),
+            frame.getTimestampNs(), frame.getBuffer(), augLen , augData );
+  }
+
+
   /**
    * Calling this function will cause frames to be scaled down to the requested resolution. Also,
    * frames will be cropped to match the requested aspect ratio, and frames will be dropped to match
@@ -96,4 +102,7 @@ class NativeAndroidVideoTrackSource {
       long nativeAndroidVideoTrackSource, int width, int height, int rotation, long timestampNs);
   private static native void nativeOnFrameCaptured(
       long nativeAndroidVideoTrackSource, int rotation, long timestampNs, VideoFrame.Buffer buffer);
+
+  private static native void nativeOnFrameCapturedAug(
+          long nativeAndroidVideoTrackSource, int rotation, long timestampNs, VideoFrame.Buffer buffer, int augLen, byte[] augData ); // arvindumrao
 }

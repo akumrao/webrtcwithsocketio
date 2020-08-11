@@ -24,4 +24,7 @@ public interface CapturerObserver {
 
   /** Delivers a captured frame. */
   void onFrameCaptured(VideoFrame frame);
+
+  /** Delivers a captured frame. */
+  void onFrameCapturedAug(VideoFrame frame , int augLen, byte[] augData) ;
 }

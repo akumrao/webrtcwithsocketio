@@ -500,7 +500,7 @@ public class EglRenderer implements VideoSink {
 
   // VideoSink interface.
   @Override
-  public void onFrame(VideoFrame frame) {
+  public void onFrame(VideoFrame frame, int augLen, byte[] augData) { //augbuffer
     synchronized (statisticsLock) {
       ++framesReceived;
     }

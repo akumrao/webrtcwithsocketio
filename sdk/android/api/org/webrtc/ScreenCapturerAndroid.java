@@ -195,10 +195,11 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
 
   // This is called on the internal looper thread of {@Code SurfaceTextureHelper}.
   @Override
-  public void onFrame(VideoFrame frame) {
+  public void onFrame(VideoFrame frame, int augLen, byte[] augData) {  // augbuffer
     numCapturedFrames++;
-    capturerObserver.onFrameCaptured(frame);
+    capturerObserver.onFrameCapturedAug(frame, augLen, augData );
   }
+
 
   @Override
   public boolean isScreencast() {

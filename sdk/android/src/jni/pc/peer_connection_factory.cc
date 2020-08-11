@@ -327,19 +327,19 @@ ScopedJavaLocalRef<jobject> CreatePeerConnectionFactoryForJava(
   //media_dependencies.video_decoder_factory =
   //    absl::WrapUnique(CreateVideoDecoderFactory(jni, jdecoder_factory));
 
-  ///////////////////////////Multiplex Changes//////////////////////////////////////////////////////////////
+  ///////////////////////////Multiplex Changes Begin//////////////////////////////////////////////////////////////
 
   media_dependencies.video_encoder_factory =   std::unique_ptr<webrtc::VideoEncoderFactory>(
       new webrtc::MultiplexAugmentOnlyEncoderFactory(
-         absl::WrapUnique(CreateVideoEncoderFactory(jni, jencoder_factory)), false ));
+         absl::WrapUnique(CreateVideoEncoderFactory(jni, jencoder_factory)), true ));
 
 
   media_dependencies.video_decoder_factory =  std::unique_ptr<webrtc::VideoDecoderFactory>(
          new webrtc::MultiplexAugmentOnlyDecoderFactory(
-                 absl::WrapUnique(CreateVideoDecoderFactory(jni, jdecoder_factory)) , false  ));
+                 absl::WrapUnique(CreateVideoDecoderFactory(jni, jdecoder_factory)) , true ));
 
 
-   //////////////////////////////Multiplex Changes////////////////////////////////////////////////////////////
+   //////////////////////////////Multiplex Changes End////////////////////////////////////////////////////////////
 
 
   dependencies.media_engine =

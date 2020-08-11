@@ -246,7 +246,7 @@ class Camera1Session implements CameraSession {
   }
 
   private void listenForTextureFrames() {
-    surfaceTextureHelper.startListening((VideoFrame frame) -> {
+    surfaceTextureHelper.startListening((VideoFrame frame, int augLen, byte[] augData) -> { //augbuffer
       checkIsOnCameraThread();
 
       if (state != SessionState.RUNNING) {

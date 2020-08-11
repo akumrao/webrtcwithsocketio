@@ -13,6 +13,7 @@
 #include "sdk/android/generated_video_jni/NativeAndroidVideoTrackSource_jni.h"
 
 #include <utility>
+#include <modules/video_coding/codecs/multiplex/include/augmented_video_frame_buffer.h>
 
 #include "rtc_base/bind.h"
 #include "rtc_base/logging.h"
@@ -151,6 +152,52 @@ void AndroidVideoTrackSource::OnFrameCaptured(
               .set_timestamp_us(j_timestamp_ns / rtc::kNumNanosecsPerMicrosec)
               .build());
 }
+
+
+void AndroidVideoTrackSource::OnFrameCapturedAug(JNIEnv* env,
+                            jint j_rotation,
+                            jlong j_timestamp_ns,
+                            const JavaRef<jobject>& j_video_frame_buffer, jint j_augLeng,  const JavaRef<jbyteArray>& augData ){
+
+
+    rtc::scoped_refptr<VideoFrameBuffer> buffer =
+                AndroidVideoBuffer::Create(env, j_video_frame_buffer);
+
+    const VideoRotation rotation = jintToVideoRotation(j_rotation);
+
+    // AdaptedVideoTrackSource handles applying rotation for I420 frames.
+    if (apply_rotation() && rotation != kVideoRotation_0)
+        buffer = buffer->ToI420();
+
+
+    int dd = (int)j_augLeng;
+    jsize augmenting_data_length = env->GetArrayLength(augData.obj());
+    unsigned char * isCopy;
+    jbyte* jbae = env->GetByteArrayElements(augData.obj(), nullptr);
+
+    char * imageSource = (char *)jbae;
+
+    std::unique_ptr<uint8_t[]> augmenting_data;
+
+    augmenting_data =std::unique_ptr<uint8_t[]>(new uint8_t[augmenting_data_length]);
+    memcpy(augmenting_data.get(),  imageSource,  augmenting_data_length);
+
+    env->ReleaseByteArrayElements( augData.obj(), jbae,0 );
+
+    rtc::scoped_refptr<AugmentedVideoFrameBuffer> augmented_buffer =
+            new rtc::RefCountedObject<AugmentedVideoFrameBuffer>(buffer,
+                                                                 std::move(augmenting_data),
+                                                                 augmenting_data_length);
+
+
+
+
+        OnFrame(VideoFrame::Builder()
+                        .set_video_frame_buffer(augmented_buffer)
+                        .set_rotation(rotation)
+                        .set_timestamp_us(j_timestamp_ns / rtc::kNumNanosecsPerMicrosec)
+                        .build());
+    }
 
 void AndroidVideoTrackSource::AdaptOutputFormat(
     JNIEnv* env,

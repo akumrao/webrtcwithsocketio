@@ -74,6 +74,26 @@ public class VideoSource extends MediaSource {
         adaptedFrame.release();
       }
     }
+
+    public void onFrameCapturedAug(VideoFrame frame , int augLen, byte[] augData) {
+      final VideoProcessor.FrameAdaptationParameters parameters =
+              nativeAndroidVideoTrackSource.adaptFrame(frame);
+      synchronized (videoProcessorLock) {
+        if (videoProcessor != null) {
+          videoProcessor.onFrameCaptured(frame, parameters);
+          return;
+        }
+      }
+
+      VideoFrame adaptedFrame = VideoProcessor.applyFrameAdaptationParameters(frame, parameters);
+      if (adaptedFrame != null) {
+
+        nativeAndroidVideoTrackSource.onFrameCapturedAug(adaptedFrame , augLen, augData);  // arvindumrao
+
+         adaptedFrame.release();
+      }
+    }
+
   };
 
   public VideoSource(long nativeSource) {
@@ -135,7 +155,7 @@ public class VideoSource extends MediaSource {
       }
       videoProcessor = newVideoProcessor;
       if (newVideoProcessor != null) {
-        newVideoProcessor.setSink(nativeAndroidVideoTrackSource::onFrameCaptured);
+        newVideoProcessor.setSink(nativeAndroidVideoTrackSource::onFrameCapturedAug);//augbuffer
         if (isCapturerRunning) {
           newVideoProcessor.onCapturerStarted(/* success= */ true);
         }

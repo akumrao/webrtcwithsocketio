@@ -441,7 +441,7 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
   }
 
   @Override
-  public void onFrame(VideoFrame frame) {
+  public void onFrame(VideoFrame frame,  int augLen, byte[] augData ) {//augbuffer
     final VideoFrame newFrame;
     final Integer decodeTimeMs;
     final long timestampNs;

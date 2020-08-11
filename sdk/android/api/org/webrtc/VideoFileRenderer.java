@@ -76,7 +76,7 @@ public class VideoFileRenderer implements VideoSink {
   }
 
   @Override
-  public void onFrame(VideoFrame frame) {
+  public void onFrame(VideoFrame frame , int augLen, byte[] augData) { //augbuffer
     frame.retain();
     renderThreadHandler.post(() -> renderFrameOnRenderThread(frame));
   }

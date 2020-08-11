@@ -99,9 +99,9 @@ public class SurfaceEglRenderer extends EglRenderer implements SurfaceHolder.Cal
 
   // VideoSink interface.
   @Override
-  public void onFrame(VideoFrame frame) {
+  public void onFrame(VideoFrame frame , int augLen, byte[] augData) {  //augbuffer
     updateFrameDimensionsAndReportEvents(frame);
-    super.onFrame(frame);
+    super.onFrame(frame, augLen,augData );
   }
 
   // SurfaceHolder.Callback interface.

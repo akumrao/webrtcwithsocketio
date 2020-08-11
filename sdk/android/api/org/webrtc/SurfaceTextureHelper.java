@@ -366,7 +366,7 @@ public class SurfaceTextureHelper {
       frameRefMonitor.onNewBuffer(buffer);
     }
     final VideoFrame frame = new VideoFrame(buffer, frameRotation, timestampNs);
-    listener.onFrame(frame);
+    listener.onFrame(frame, 0, null); //augbuffer
     frame.release();
   }
 

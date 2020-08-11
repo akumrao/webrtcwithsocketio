@@ -180,7 +180,7 @@ class Camera2Session implements CameraSession {
         return;
       }
 
-      surfaceTextureHelper.startListening((VideoFrame frame) -> {
+      surfaceTextureHelper.startListening((VideoFrame frame, int augLen, byte[] augData) -> { // augbuffer
         checkIsOnCameraThread();
 
         if (state != SessionState.RUNNING) {
