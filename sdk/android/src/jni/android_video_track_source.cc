@@ -172,16 +172,16 @@ void AndroidVideoTrackSource::OnFrameCapturedAug(JNIEnv* env,
    
     jsize augmenting_data_length = env->GetArrayLength(augData.obj());
 
-    jbyte* jbae = env->GetByteArrayElements(augData.obj(), nullptr);
+    jbyte* jAugData = env->GetByteArrayElements(augData.obj(), nullptr);
 
-    char * imageSource = (char *)jbae;
+    char * cAugData = (char *)jAugData;
 
     std::unique_ptr<uint8_t[]> augmenting_data;
 
     augmenting_data =std::unique_ptr<uint8_t[]>(new uint8_t[augmenting_data_length]);
-    memcpy(augmenting_data.get(),  imageSource,  augmenting_data_length);
+    memcpy(augmenting_data.get(),  cAugData,  augmenting_data_length);
 
-    env->ReleaseByteArrayElements( augData.obj(), jbae,0 );
+    env->ReleaseByteArrayElements( augData.obj(), jAugData,0 );
 
     rtc::scoped_refptr<AugmentedVideoFrameBuffer> augmented_buffer =
             new rtc::RefCountedObject<AugmentedVideoFrameBuffer>(buffer,

@@ -133,7 +133,6 @@ public class MultiplexVideoEncoderFactory implements VideoEncoderFactory {
   @Override
   public VideoCodecInfo[] getSupportedCodecs() {
 
-    Log.d("ria","encoder getSupportedCodecs");
     // HW encoding is not supported below Android Kitkat.
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
       return new VideoCodecInfo[0];
