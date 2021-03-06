@@ -74,7 +74,7 @@ inline int64_t Int64MsToQ32x32(int64_t milliseconds) {
     return std::numeric_limits<int64_t>::min();
   }
 
-  if (result >= std::numeric_limits<int64_t>::max()) {
+  if (result >= (double)std::numeric_limits<int64_t>::max()) {
     return std::numeric_limits<int64_t>::max();
   }
 
@@ -93,7 +93,7 @@ inline uint64_t Int64MsToUQ32x32(int64_t milliseconds) {
     return std::numeric_limits<uint64_t>::min();
   }
 
-  if (result >= std::numeric_limits<uint64_t>::max()) {
+  if (result >= (double)std::numeric_limits<uint64_t>::max()) {
     return std::numeric_limits<uint64_t>::max();
   }
 
