@@ -146,3 +146,10 @@ to copy header files of webrtc
 find . -iname "*.h" | xargs -If cp --parents f /c/arvind
 
 
+#Linux 
+
+gn gen out/x64/Release --args='rtc_enable_protobuf=false rtc_libvpx_build_vp9=false use_glib=false rtc_use_pipewire=false rtc_use_gtk=false rtc_include_pulse_audio=false rtc_include_tests=false  treat_warnings_as_errors=false rtc_include_ilbc=false rtc_build_examples=false rtc_build_tools=false rtc_build_ssl=false is_component_build=false enable_iterator_debugging=false rtc_use_x11=false is_debug=false use_gio=false  strip_debug_info=true symbol_level=0 rtc_ssl_root="/export/UnrealEngine/Engine/Source/ThirdParty/OpenSSL/1.1.1c/include/Linux/x86_64-unknown-linux-gnu/"'
+
+or
+
+gn gen out/x64/Release --args='rtc_enable_protobuf=false  use_glib=false rtc_use_pipewire=false rtc_use_gtk=false rtc_include_pulse_audio=false rtc_include_tests=false  treat_warnings_as_errors=false rtc_include_ilbc=false rtc_build_examples=false rtc_build_tools=false rtc_build_ssl=false is_component_build=false enable_iterator_debugging=false rtc_use_x11=false is_debug=false use_gio=false  strip_debug_info=true symbol_level=0 rtc_ssl_root="/export/UnrealEngine/Engine/Source/ThirdParty/OpenSSL/1.1.1c/include/Linux/x86_64-unknown-linux-gnu/"
