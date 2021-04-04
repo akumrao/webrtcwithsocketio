@@ -882,3 +882,39 @@ if (!build_with_chromium) {
     ]
   }
 }
+
+
+
+
+rtc_executable("arvind") {
+  testonly = true
+  sources = [
+    "arvind/main.cc",
+  ]
+   deps = [
+      "../api:create_peerconnection_factory",
+      "../api:libjingle_peerconnection_api",
+      "../api:media_stream_interface",
+      "../api/audio_codecs:builtin_audio_decoder_factory",
+      "../api/audio_codecs:builtin_audio_encoder_factory",
+      "../api/video_codecs:builtin_video_decoder_factory",
+      "../api/video_codecs:builtin_video_encoder_factory",
+      "../api/video:video_frame",
+      "../api/video:video_rtp_headers",
+      "../media:rtc_audio_video",
+      "../media:rtc_internal_video_codecs",
+      "../media:rtc_media",
+      "../media:rtc_media_base",
+      "../modules/audio_device",
+      "../modules/audio_processing",
+      "../modules/audio_processing:api",
+      "../modules/video_capture:video_capture_module",
+      "../pc:libjingle_peerconnection",
+      "../pc:peerconnection",
+      "../rtc_base",
+      "../test:platform_video_capturer",
+      "../test:video_test_common",
+      "//third_party/abseil-cpp/absl/memory",
+
+    ]
+}
