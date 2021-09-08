@@ -14,7 +14,9 @@
 #include "net/netInterface.h"
 #include "http/HttpServer.h"
 #include "http/HttpConn.h"
+#if HTTPSSL
 #include "http/HttpsConn.h"
+#endif
 #include "net/TcpServer.h"
 #include "http/parser.h"
 #include "http/responder.h"
@@ -34,7 +36,7 @@ namespace base {
         public:
 
         public:
-            HttpServerBase(Listener *listener, std::string ip, int port , bool ssl=false );
+            HttpServerBase(Listener *listener, std::string ip, int port , bool multithreaded =false, bool ssl=false );
 
             ~HttpServerBase() override;
 
@@ -54,7 +56,7 @@ namespace base {
         protected:
             
             bool ssl;
-
+ 
         };
 
         /**********************************************************************************************************************/
@@ -65,7 +67,7 @@ namespace base {
         class HttpServer : public HttpServerBase {
         public:
 
-            HttpServer( std::string ip, int port, ServerConnectionFactory *factory = nullptr);
+            HttpServer( std::string ip, int port, ServerConnectionFactory *factory = nullptr, bool multithreaded =false);
 
             ServerResponder* createResponder(HttpBase* conn);
 

@@ -15,6 +15,7 @@
 #include "base/logger.h"
 #include "base/util.h"
 #include "base/util.h"
+#include "base/application.h"
 #include <algorithm>
 #include <fstream>
 #include <memory>
@@ -85,7 +86,7 @@ std::string extname(const std::string& path, bool includeDot)
     if (dirp != std::string::npos && dotp < dirp)
         return "";
 
-    return path.substr((dotp + includeDot) ? 0 : 1);
+    return path.substr(dotp + (includeDot ? 0 : 1));
 }
 
 
@@ -154,7 +155,7 @@ struct FSReq
 #define FSapi(func, ...)                                                       \
     FSReq wrap;                                                                \
     int err =                                                                  \
-        uv_fs_##func(uv_default_loop(), &wrap.req, __VA_ARGS__, nullptr);      \
+        uv_fs_##func(Application::uvGetLoop(), &wrap.req, __VA_ARGS__, nullptr);      \
     if (err < 0)                                                               \
         uv::throwError(std::string("Filesystem error: ") + #func +             \
                        std::string(" failed"), err);
@@ -171,6 +172,18 @@ void readdir(const std::string& path, std::vector<std::string>& res)
         res.push_back(dent.name);
     }
 }
+
+void readdir_filter(const std::string& path, std::vector<std::string>& res, const std::string& filter)
+{
+    internal::FSapi(scandir, path.c_str(), 0)
+
+    uv_dirent_t dent;
+    while (UV_EOF != uv_fs_scandir_next(&wrap.req, &dent)) {
+        if(extname(dent.name)   ==  filter )
+        res.push_back(dent.name);
+    }
+}
+
 
 
 void mkdir(const std::string& path, int mode)

@@ -31,12 +31,12 @@ namespace base {
 
         /*************************************************************************************************************/
         /******************************************************************************************************************/
-        static constexpr size_t MaxTcpConnectionsPerServer{ 100000};
+        static constexpr size_t MaxTcpConnectionsPerServer{ 1000};
 
         /* Instance methods. */
 
-        HttpServerBase::HttpServerBase(Listener *listener, std::string ip, int port, bool ssl)
-        : TcpServerBase( BindTcp(ip, port), 256),listener(listener),ssl(ssl)
+        HttpServerBase::HttpServerBase(Listener *listener, std::string ip, int port, bool multithreaded,  bool ssl)
+        : TcpServerBase( BindTcp(ip, port), 256, multithreaded),listener(listener),ssl(ssl)
         {
 
         }
@@ -52,9 +52,11 @@ namespace base {
 
             LTrace(" On acccept-> UserOnTcpConnectionAlloc"  )
             // Allocate a new RTC::HttpConnection for the HttpServerBase to handle it.
+#if HTTPSSL
             if(ssl)
             *connection = new HttpsConnection(listener, HTTP_REQUEST);
             else
+#endif
             *connection = new HttpConnection(listener, HTTP_REQUEST);
                
             
@@ -74,15 +76,16 @@ namespace base {
 
         void HttpServerBase::UserOnTcpConnectionClosed(TcpConnectionBase* connection) {
 
-            //this->listener->on_close(connection);
+            //override this function
+
         }
 
         /*******************************************************************************************************************/
 
 
 
-        HttpServer::HttpServer( std::string ip, int port, ServerConnectionFactory *factory) 
-        : HttpServerBase( this,  ip, port )
+        HttpServer::HttpServer( std::string ip, int port, ServerConnectionFactory *factory, bool multithreaded ) 
+        : HttpServerBase( this,  ip, port, multithreaded )
         ,ip(ip), port(port), _factory(factory)
         {
  
@@ -112,8 +115,11 @@ namespace base {
         }
 
         void HttpServer::on_close(Listener* connection) {
+	     //override this function
 
-            STrace << "HttpServer::on_close, LocalIP" << connection->GetLocalIp() << " PeerIP" << connection->GetPeerIp() << std::endl << std::flush;
+            TcpConnectionBase *con = (TcpConnectionBase*)connection;
+            STrace << "HttpServer::on_close, LocalIP" << con->GetLocalIp() << " PeerIP" << con->GetPeerIp() << std::endl << std::flush;
+          
         }
 
        
@@ -263,7 +269,7 @@ static int on_body_end(multipartparser* )
 
 /***********************************************************************************************/
         
-
+#if HTTPSSL
         HttpsServer::HttpsServer( std::string ip, int port, ServerConnectionFactory *factory) 
         : HttpServerBase( this,  ip, port , true)
         ,ip(ip), port(port), _factory(factory)
@@ -322,6 +328,7 @@ static int on_body_end(multipartparser* )
          
                LTrace("HttpsServer::on_header" )
         }
+#endif
 
     } // namespace net
 } // base

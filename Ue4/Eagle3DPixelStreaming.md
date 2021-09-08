@@ -13,6 +13,16 @@ Version 0.1
 This document helps in compiling Eagle3D PixelStreaming Plugin
 
 
+## Features this repoistory provides
+- Lite -ICE
+- WebRTC Statistics 
+- M76 webrtc version, rev.28114
+- Audio Mute Control
+- Onfly Webrtc parameter Settings
+- Better Frame Adaption 
+
+
+
 ## _Pixel Streamig Compilation_
 
 git clone git@github.com:eagle3dstreaming/UnrealEngine.git
@@ -66,7 +76,7 @@ cd src
 
 set DEPOT_TOOLS_WIN_TOOLCHAIN=0
 
-cd src git branch -r git checkout branch-heads/m75
+cd src git branch -r git checkout branch-heads/m76
 
 git remote add arvind git@github.com:akumrao/webrtcwithsocketio.git
 
@@ -102,7 +112,7 @@ cp Ue4/srtpPatch.diff to third_party/libsrtp
 
 cd third_party/libsrtp
 
-git apply srtpPatch.diff
+git apply srtppatch.diff
 
 cd ..
 
@@ -116,27 +126,25 @@ gn gen out/x64/Release  --args="target_cpu=\"x64\" use_rtti=true is_debug=false 
 
 ninja -C out/x64/Release webrtc
 
+gn gen out/x64/Debug  --args="target_cpu=\"x64\" use_rtti=true is_debug=true symbol_level=2 rtc_build_tools=false rtc_build_examples=true rtc_include_tests=false enable_precompiled_headers=false use_cxx11=false use_custom_libcxx=false use_custom_libcxx_for_host=false rtc_build_ssl=false rtc_ssl_root=\"E:\UnrealEngine\Engine\Source\ThirdParty\OpenSSL\1.1.1\Include\Win64\VS2015\" is_clang=false is_component_build=false use_lld=false"
 
-## Features
-- Lite -ICE
-- WebRTC Statistics 
-- M76 webrtc version
-- Audio Mute Control
-- Onfly Webrtc parameter Settings
-- Better Frame Adaption 
+ninja -C out/x64/Debug webrtc
 
 
 
-## PATH and Commands
-For running game project for Pixel streamming
+to copy header files of webrtc
+find . -iname "*.h" | xargs -If cp --parents f /c/arvind
+
+to copy lib
+out\x64\Release\obj\webrtc.lib to C:\UnrealEngine\Engine\Source\ThirdParty\WebRTC\rev.28114\Lib\Win64\VS2015\Release
+
+
+
+# Command line to run game with pixel streamimg eabled
 ./project -AudioMixer -PixelStreamingIP=localhost -PixelStreamingPort=8888 -RenderOffScreen -log
 
-//Upload project to control panel 
+# Upload project to control panel
 https://connector.eagle3dstreaming.com:500/nelsonww/ControlPanel/083057
-
-
-
-
 
 //For demo
 https://prod.eagle3dstreaming.com:8228/5435467354?&appName=Arvind&isDebugging=1&showbrowserMouse=0&useExtendedTyping=0&showPsControl=0&MouseControlScheme=1&expireOn=999999999&exeLunchArgs=-ResX=1280%20%20-ResY=720

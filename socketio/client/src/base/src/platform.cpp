@@ -15,8 +15,9 @@
 
 #include "uv.h"
 
-#include <stdlib.h>
-#include <string.h>
+#include <cstring>
+#include <sstream>
+#include <string>
 
 #ifdef base_WIN
 #include <windows.h>
@@ -78,11 +79,13 @@ int numCpuCores()
 
 void sleep(int ms)
 {
-#ifdef base_WIN
-    Sleep(ms);
-#else
-    usleep(ms * 1000);
-#endif
+//#ifdef base_WIN
+//    Sleep(ms);
+//#else
+//    usleep(ms * 1000);
+//#endif
+    
+    uv_sleep(ms);
 }
 
 
